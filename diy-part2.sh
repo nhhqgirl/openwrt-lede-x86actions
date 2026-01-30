@@ -12,20 +12,11 @@
 # 选择5.15内核
 #sed -i 's/6.12/5.15/g' target/linux/x86/Makefile
 # 设置默认ip
-sed -i 's/192.168.1.1/192.168.100.1/g' package/base-files/files/bin/config_generate
+sed -i 's/192.168.1.1/192.168.81.1/g' package/base-files/files/bin/config_generate
 
 # 移除要替换的包
-rm -rf feeds/luci/applications/luci-app-passwall
-rm -rf feeds/luci/applications/luci-app-passwall2
-rm -rf feeds/luci/applications/luci-app-openclash
-rm -rf feeds/luci/applications/luci-app-lucky
 rm -rf feeds/luci/themes/luci-theme-argon
-rm -rf feeds/packages/net/chinadns-ng
-rm -rf feeds/packages/net/geoview
-rm -rf feeds/packages/net/sing-box
-rm -rf feeds/packages/net/xray-core
-rm -rf feeds/packages/net/lucky
-rm -rf feeds/packages/utils/coremark
+
 
 # 设置默认主题
 sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci-light/Makefile
@@ -49,19 +40,11 @@ function git_sparse_clone() {
 }
 
 # 添加插件
-git_sparse_clone openwrt-24.10 https://github.com/openwrt/packages utils/coremark
-git clone https://github.com/jerrykuku/luci-app-argon-config.git package/luci-app-argon-config
-git clone https://github.com/sirpdboy/luci-app-lucky.git package/lucky
+git clone https://github.com/nhhqgirl/luci-app-onliner.git package/lean/luci-app-onliner
+git clone https://github.com/nhhqgirl/luci-app-poweroff.git package/lean/luci-app-poweroff
+git clone --depth=1 https://github.com/nhyoungboy/luci-theme-opentomcat.git package/luci-theme-opentomcat
 git clone --depth=1 -b master https://github.com/jerrykuku/luci-theme-argon package/luci-theme-argon
 git clone --depth=1 -b master https://github.com/vernesong/OpenClash package/luci-app-openclash
-git clone --depth=1 https://github.com/xiaorouji/openwrt-passwall-packages package/openwrt-passwall
-git clone --depth=1 -b main https://github.com/Openwrt-Passwall/openwrt-passwall package/luci-app-passwall
-git clone --depth=1 -b main https://github.com/Openwrt-Passwall/openwrt-passwall2 package/openwrt-passwall2
-git clone https://github.com/sirpdboy/luci-app-taskplan package/luci-app-taskplan
-git clone https://github.com/miaoermua/luci-app-leigod-acc package/luci-app-leigod-acc
 
-# istore
-git clone --depth=1 -b main https://github.com/linkease/nas-packages-luci package/nas-packages-luci
-git clone --depth=1 -b master https://github.com/linkease/nas-packages package/nas-packages
-git clone --depth=1 -b main https://github.com/linkease/istore package/istore
+
 
