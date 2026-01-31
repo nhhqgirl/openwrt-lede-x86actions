@@ -50,3 +50,6 @@ git clone --depth=1 -b master https://github.com/vernesong/OpenClash package/luc
 sed -i 's/services\/nlbw/nlbw/g; /path/s/admin\///g' feeds/luci/applications/luci-app-nlbwmon/root/usr/share/luci/menu.d/luci-app-nlbwmon.json
 sed -i 's/services\///g' feeds/luci/applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js
 
+# 设置samba4独立菜单
+sed -i 's/services\/samba4/samba4/g; /path/s/admin\///g' feeds/luci/applications/luci-app-samba4/root/usr/share/luci/menu.d/luci-app-samba4.json
+sed -i 's/services\///g' feeds/luci/applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4/config.js
