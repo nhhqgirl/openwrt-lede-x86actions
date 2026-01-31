@@ -144,6 +144,7 @@ jobs:
         df -hT
         echo "=================================="
 
+    # 修复后的编译步骤：移除sudo、修复临时目录、保留报错日志
     - name: Compile the firmware
       id: compile
       run: |
@@ -152,10 +153,10 @@ jobs:
         COMPILE_THREADS=$(( $(nproc) - 1 ))
         if [ $COMPILE_THREADS -lt 1 ]; then COMPILE_THREADS=1; fi
         echo "Using $COMPILE_THREADS thread(s) for compile (safe mode)"
-        # 创建独立编译临时目录，指向系统tmp（内存挂载，读写更快）
-        mkdir -p /tmp/openwrt-tmp && sudo chmod 777 /tmp/openwrt-tmp
-        # 核心优化：关闭冗余日志+限制临时文件目录，避免日志膨胀成超大文件
-        make -j$COMPILE_THREADS V=0 LOG_LEVEL=0 TMPDIR=/tmp/openwrt-tmp 2>/dev/null \
+        # 创建编译临时目录（当前用户权限，避免sudo权限冲突）
+        mkdir -p $GITHUB_WORKSPACE/openwrt-tmp && chmod 777 $GITHUB_WORKSPACE/openwrt-tmp
+        # 核心编译命令：失败后单线程输出详细日志，便于排查
+        make -j$COMPILE_THREADS V=0 TMPDIR=$GITHUB_WORKSPACE/openwrt-tmp \
           || make -j1 V=s
         # 输出编译状态
         echo "status=success" >> $GITHUB_OUTPUT
@@ -163,7 +164,7 @@ jobs:
         grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
         [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
         echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
-        
+
     - name: Check space usage
       if: (!cancelled())
       run: df -hT
@@ -175,14 +176,26 @@ jobs:
         name: OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
         path: openwrt/bin
 
+    # 修复后的文件整理步骤：增加目录存在性检查+友好排查提示
     - name: Organize files
       id: organize
       if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       run: |
-        cd openwrt/bin/targets/*/*
-        rm -rf packages
-        echo "FIRMWARE=$PWD" >> $GITHUB_ENV
-        echo "status=success" >> $GITHUB_OUTPUT
+        TARGET_DIR="openwrt/bin/targets/*/*"
+        if [ -d "$TARGET_DIR" ]; then
+          cd "$TARGET_DIR"
+          rm -rf packages
+          echo "FIRMWARE=$PWD" >> $GITHUB_ENV
+          echo "status=success" >> $GITHUB_OUTPUT
+          echo "✅ 成功定位固件目录：$PWD"
+        else
+          echo "❌ 错误：未找到OpenWrt固件目录，编译过程可能失败！"
+          echo "🔍 请查看上方「Compile the firmware」步骤的完整日志，定位具体报错原因"
+          echo "📂 尝试查看openwrt/bin/targets目录结构（验证编译结果）："
+          ls -l openwrt/bin/targets/ 2>/dev/null || echo "→ openwrt/bin/targets 目录不存在，编译完全失败"
+          echo "status=failed" >> $GITHUB_OUTPUT
+          exit 1
+        fi
         
     - name: Upload firmware directory
       uses: actions/upload-artifact@main
