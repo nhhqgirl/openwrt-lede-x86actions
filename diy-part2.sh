@@ -11,6 +11,7 @@
 #
 # 选择5.15内核
 #sed -i 's/6.12/5.15/g' target/linux/x86/Makefile
+
 # 设置默认ip
 sed -i 's/192.168.1.1/192.168.81.1/g' package/base-files/files/bin/config_generate
 
@@ -45,4 +46,7 @@ git clone --depth=1 -b master https://github.com/jerrykuku/luci-theme-argon pack
 git clone --depth=1 -b master https://github.com/vernesong/OpenClash package/luci-app-openclash
 
 
+# 设置nlbwmon独立菜单
+sed -i 's/services\/nlbw/nlbw/g; /path/s/admin\///g' feeds/luci/applications/luci-app-nlbwmon/root/usr/share/luci/menu.d/luci-app-nlbwmon.json
+sed -i 's/services\///g' feeds/luci/applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js
 
