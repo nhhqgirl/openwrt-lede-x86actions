@@ -53,3 +53,7 @@ sed -i 's/services\///g' feeds/luci/applications/luci-app-nlbwmon/htdocs/luci-st
 # 设置samba4独立菜单
 sed -i 's/services\/samba4/samba4/g; /path/s/admin\///g' feeds/luci/applications/luci-app-samba4/root/usr/share/luci/menu.d/luci-app-samba4.json
 sed -i 's/services\///g' feeds/luci/applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4/config.js
+
+# 设置wol独立菜单
+sed -i 's/services\/wol/wol/g; /path/s/admin\///g' feeds/luci/applications/luci-app-wol/root/usr/share/luci/menu.d/luci-app-wol.json
+sed -i 's/services\///g' feeds/luci/applications/luci-app-wol/htdocs/luci-static/resources/view/wol/config.js
