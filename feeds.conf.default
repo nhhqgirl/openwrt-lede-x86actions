@@ -1,9 +1,9 @@
-# 统一指定 openwrt-23.05 分支，与 luci 版本匹配
-src-git packages https://github.com/coolsnowwolf/packages.git;openwrt-23.05
+
+src-git packages https://github.com/coolsnowwolf/packages.git;openwrt-24.10
 #src-git luci https://github.com/coolsnowwolf/luci.git
-src-git luci https://github.com/coolsnowwolf/luci.git;openwrt-23.05
+src-git luci https://github.com/coolsnowwolf/luci.git;openwrt-24.10
 #src-git luci https://github.com/coolsnowwolf/luci.git;openwrt-24.10
-src-git routing https://github.com/coolsnowwolf/routing.git;openwrt-23.05
+src-git routing https://github.com/coolsnowwolf/routing.git;openwrt-24.10
 src-git telephony https://github.com/coolsnowwolf/telephony.git;openwrt-24.10
 #src-git helloworld https://github.com/fw876/helloworld.git
 #src-git qmodem https://github.com/FUjr/modem_feeds.git
