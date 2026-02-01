@@ -66,3 +66,62 @@ wget -qO- $GEOSITE_URL > files/etc/openclash/GeoSite.dat
 chmod +x files/etc/openclash/core/clash*
 # 5. 下载完成提示（方便编译时查看执行状态）
 echo -e "\033[32m✅ OpenClash核心、Country.mmdb、GeoIP.dat、GeoSite.dat 下载部署完成！\033[0m"
+
+# -----------------------------------------------------------------------------
+# 1. 预置网络配置 (Network Configuration)
+# -----------------------------------------------------------------------------
+# 创建自定义配置文件的存放目录（如果不存在）
+mkdir -p package/base-files/files/etc/config
+
+# 确保有默认值（防止本地测试时变量为空导致配置错误，这里设为占位符）
+: "${PPPOE_USERNAME:=username_placeholder}"
+: "${PPPOE_PASSWORD:=password_placeholder}"
+
+# 将你的 network 文件内容写入目标位置
+# 解释：EOF 块中的 ${变量} 会被自动替换为环境变量中的真实值
+cat > package/base-files/files/etc/config/network <<EOF
+
+config interface 'loopback'
+	option device 'lo'
+	option proto 'static'
+	option ipaddr '127.0.0.1'
+	option netmask '255.0.0.0'
+
+config globals 'globals'
+	option packet_steering '1'
+
+config device
+	option name 'br-lan'
+	option type 'bridge'
+	list ports 'eth0'
+	list ports 'eth1'
+	list ports 'eth2'
+
+config interface 'lan'
+	option device 'br-lan'
+	option proto 'static'
+	option ipaddr '192.168.81.1'
+	option netmask '255.255.255.0'
+	option ip6assign '60'
+
+config interface 'wan'
+	option device 'eth3'
+	option proto 'pppoe'
+	option username '${PPPOE_USERNAME}'
+	option password '${PPPOE_PASSWORD}'
+	option ipv6 'auto'
+
+config interface 'wan6'
+	option proto 'dhcpv6'
+	option device 'eth3'
+	option reqaddress 'try'
+	option reqprefix 'auto'
+
+config interface 'VPN'
+	option device 'ipsec0'
+	option proto 'static'
+	option ipaddr '192.168.0.1'
+	option netmask '255.255.255.0'
+
+EOF
+
