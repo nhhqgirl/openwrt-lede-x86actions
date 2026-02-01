@@ -1,18 +1,10 @@
-# Lean 核心自定义包源（必须添加，解决package/lean/依赖缺失）
-src-git lean https://github.com/coolsnowwolf/lede.git;main package/lean
-# Lean 官方基础软件包源
-src-git packages https://github.com/coolsnowwolf/packages
-# Lean Luci 核心源（适配OpenWrt 24.10）
-src-git luci https://github.com/coolsnowwolf/luci.git;openwrt-24.10
-# Lean 路由相关包源
-src-git routing https://github.com/coolsnowwolf/routing
-# Lean 电话/语音相关包源
-src-git telephony https://github.com/coolsnowwolf/telephony.git
-# PassWall 科学上网插件源（适配OpenWrt 24.10稳定分支）
-src-git passwall_packages https://github.com/Openwrt-Passwall/openwrt-passwall-packages.git;openwrt-24.10
-src-git passwall_luci https://github.com/Openwrt-Passwall/openwrt-passwall.git;openwrt-24.10
-
-# 以下为注释备用源，无需启用
+# 统一指定 openwrt-23.05 分支，与 luci 版本匹配
+src-git packages https://github.com/coolsnowwolf/packages.git;openwrt-23.05
+#src-git luci https://github.com/coolsnowwolf/luci.git
+src-git luci https://github.com/coolsnowwolf/luci.git;openwrt-23.05
+#src-git luci https://github.com/coolsnowwolf/luci.git;openwrt-24.10
+src-git routing https://github.com/coolsnowwolf/routing.git;openwrt-23.05
+src-git telephony https://github.com/coolsnowwolf/telephony.git;openwrt-24.10
 #src-git helloworld https://github.com/fw876/helloworld.git
 #src-git qmodem https://github.com/FUjr/modem_feeds.git
 #src-git video https://github.com/openwrt/video.git
