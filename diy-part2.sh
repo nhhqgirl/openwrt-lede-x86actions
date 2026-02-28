@@ -41,6 +41,7 @@ function git_sparse_clone() {
 git clone https://github.com/nhhqgirl/luci-app-onliner.git package/lean/luci-app-onliner
 git clone --depth=1 -b master https://github.com/jerrykuku/luci-theme-argon package/luci-theme-argon
 git clone --depth=1 -b master https://github.com/vernesong/OpenClash package/luci-app-openclash
+git clone --depth=1 -b master https://github.com/nhhqgirl/wolplus package/luci-app-wolplus
 
 
 # 设置nlbwmon独立菜单
