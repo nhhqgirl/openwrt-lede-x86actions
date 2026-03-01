@@ -14,3 +14,7 @@
 #sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
 
 
+cd lede
+./scripts/feeds clean          # 清空旧的feeds缓存
+./scripts/feeds update -a      # 拉取24.10分支的luci源码
+./scripts/feeds install -a     # 安装到编译目录
